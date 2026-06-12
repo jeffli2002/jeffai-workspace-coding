@@ -20,7 +20,48 @@ env -u HTTPS_PROXY -u ALL_PROXY -u HTTP_PROXY -u https_proxy -u http_proxy -u al
 
 **教训：** 使用本地 API 路由/网关时，代理环境变量会劫持本地连接请求，导致诡异错误。以后遇到类似 "本地服务不可达但服务明明在运行" 的情况，优先检查代理变量。
 
-## 2025-06-05
+## 2025-06-12
+
+### Codex CLI + APP 登录失败
+
+**问题：** Codex CLI 和 Codex APP 登录失败，报错：
+- CLI: `auth no Codex credentials were found` + `reachability one or more required provider endpoints are unreachable`
+- APP: `Token exchange failed: error sending request for url (https://auth.openai.com/oauth/token)`
+- APP 后续: `403 Forbidden: Country, region, or territory not supported`
+
+**根因：** 多层代理配置问题 + Codex APP 本身不支持代理：
+1. **Shell 环境变量**：`HTTP_PROXY=http://127.0.0.1:7897`, `HTTPS_PROXY=http://127.0.0.1:7897`, `ALL_PROXY=socks5://127.0.0.1:7993`
+2. **macOS 系统代理**：所有网络接口的 HTTP/HTTPS 代理都指向 `7993`（SOCKS5 端口），协议不匹配
+3. **7897 端口 SSL 问题**：HTTP 代理端口的 TLS 握手失败
+4. **Codex APP 不支持代理**：GitHub Issue #10555，APP 完全不支持 HTTP/SOCKS5 代理配置
+5. **Codex APP OAuth 地区限制**：即使通过 Proxifier 强制代理，APP 的 token exchange 返回 403（地区不支持）
+
+**CLI 解决方案：**
+```bash
+# 去掉 HTTP 代理变量（7897 端口 SSL 有问题）
+unset HTTP_PROXY HTTPS_PROXY
+# 保留 SOCKS5 代理
+export ALL_PROXY="socks5://127.0.0.1:7993"
+codex login
+```
+
+**APP 解决方案：**
+- Codex APP 目前不支持代理，在国内无法使用
+- 即使通过 Proxifier 强制 SOCKS5 代理，OAuth 登录仍返回 403（地区不支持）
+- 建议用 CLI 代替，功能相同
+
+**CLI MCP 警告（可忽略）：**
+- `codex_apps` MCP 启动失败是已知 bug（GitHub Issue #16360）
+- 原因：`codex_apps` 使用 reqwest 库，编译时未启用 SOCKS5 feature
+- 解决方案：同时配置 HTTP_PROXY + ALL_PROXY，或忽略该警告（不影响核心功能）
+
+**教训：**
+1. 代理工具的 HTTP 端口和 SOCKS5 端口不能混用——系统代理配置里 HTTP 代理必须指向 HTTP 端口，不能指向 SOCKS5 端口
+2. 桌面应用不读 shell 环境变量，只读系统代理设置
+3. 检查所有网络接口的代理配置，不只 Wi-Fi
+4. Codex APP 在国内目前无法使用，等 OpenAI 修复 Issue #10555
+
+**关联人：** 黎镭（ou_aeb3984fc66ae7c78e396255f7c7a11b）
 
 ### Claude Code + CC Switch 模型映射配置
 
