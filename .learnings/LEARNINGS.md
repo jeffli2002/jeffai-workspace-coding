@@ -52,3 +52,19 @@ env -u HTTPS_PROXY -u ALL_PROXY -u HTTP_PROXY -u https_proxy -u http_proxy -u al
 4. 检查 `~/.claude/settings.json` 是否有 JSON 语法错误（今天发现的逗号问题）
 
 **关联人：** 黎镭（ou_aeb3984fc66ae7c78e396255f7c7a11b）
+## 2026-09-14 16:47 - Supabase Project Paused
+
+**Issue:** Supabase project njxjuvxosvwvluxefrzg was paused, causing DNS resolution to fail
+
+**Root Cause:** Supabase pauses inactive projects and removes their DNS records
+
+**Detection:** Script fails with '[Errno -2] Name or service not known' for all modules
+
+**Resolution:** Unpause project via Supabase dashboard or Management API
+
+**Prevention:**
+1. Monitor Supabase project status
+2. Set up alerts for paused projects
+3. Consider upgrading to paid plan to prevent auto-pause
+4. Fix sync script to exit with non-zero code on failure
+
