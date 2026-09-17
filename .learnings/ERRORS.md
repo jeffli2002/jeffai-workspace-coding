@@ -20,3 +20,7 @@
 - 根因：`njxjuvxosvwvluxefrzg.supabase.co` 在 8.8.8.8 / 1.1.1.1 均返回 NXDOMAIN → Supabase 项目疑似被删除（非本机网络/DNS 问题，supabase.co 主域可解析）
 - 处置：已通知老板。需要：恢复/重建 Supabase 项目，或更新 `/root/.openclaw/credentials/supabase.json` 的 url + service_key
 - 注意：cron job 的 failureAlert(after:3) 统计的是 agentTurn 崩溃次数，脚本失败但 agent 正常结束时不会累加，内置告警不会触发 → 需手动告警
+## 2026-09-17 - sync-supabase-30m DNS failure
+- Script `sync_supabase.py` failed for Memories/Documents/Tasks with `[Errno -2] Name or service not known`; treat as network/DNS/Supabase URL issue.
+- Feishu alert via `message` tool with `channel=feishu` + `target=user:ou_...` worked; local `feishu.py` needed env and hardcoded creds hit `open_id cross app`.
+
