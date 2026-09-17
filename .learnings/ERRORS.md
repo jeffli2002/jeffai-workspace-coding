@@ -24,3 +24,12 @@
 - Script `sync_supabase.py` failed for Memories/Documents/Tasks with `[Errno -2] Name or service not known`; treat as network/DNS/Supabase URL issue.
 - Feishu alert via `message` tool with `channel=feishu` + `target=user:ou_...` worked; local `feishu.py` needed env and hardcoded creds hit `open_id cross app`.
 
+## 2026-09-17 11:30 - Supabase 同步 DNS 失败
+
+**任务**: sync-supabase-30m 定时任务
+**错误**: [Errno -2] Name or service not known
+**影响模块**: Memories, Documents, Tasks（全部失败）
+**原因**: DNS 解析失败，无法连接到 Supabase 服务器
+**处理**: 需要检查网络连接或 DNS 配置
+
+---
