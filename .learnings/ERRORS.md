@@ -33,3 +33,10 @@
 **处理**: 需要检查网络连接或 DNS 配置
 
 ---
+
+## 2026-09-18 15:00 — sync-supabase-30m 同步失败
+- 任务: Second Brain 本机→Supabase 定时同步
+- 现象: Memories/Documents/Tasks 全部失败, `[Errno -2] Name or service not known`
+- 判断: DNS 解析失败 — 网络故障或 SUPABASE_URL 无效/项目暂停
+- 待办: 检查 DNS、检查 SUPABASE_URL 环境变量、确认 Supabase 项目状态
+- 备注: message 工具无默认 target，failure alert 未能推送，需配置告警 channel
