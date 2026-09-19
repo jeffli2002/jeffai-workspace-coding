@@ -40,3 +40,8 @@
 - 判断: DNS 解析失败 — 网络故障或 SUPABASE_URL 无效/项目暂停
 - 待办: 检查 DNS、检查 SUPABASE_URL 环境变量、确认 Supabase 项目状态
 - 备注: message 工具无默认 target，failure alert 未能推送，需配置告警 channel
+
+## 2026-09-19 sync-supabase-30m 失败：Supabase 项目域名 NXDOMAIN
+- 现象：sync_supabase.py 三个模块全部报 "Name or service not known"
+- 排查：supabase.com 正常解析；项目域名 njxjuvxosvwvluxefrzg.supabase.co 在本地 DNS、8.8.8.8、1.1.1.1 均 NXDOMAIN → 项目已被删除或长期暂停
+- 处理：需老板介入——恢复/重建 Supabase 项目并更新 /root/.openclaw/credentials/supabase.json，或停用该 cron
