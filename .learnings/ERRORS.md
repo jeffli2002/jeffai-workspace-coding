@@ -45,3 +45,9 @@
 - 现象：sync_supabase.py 三个模块全部报 "Name or service not known"
 - 排查：supabase.com 正常解析；项目域名 njxjuvxosvwvluxefrzg.supabase.co 在本地 DNS、8.8.8.8、1.1.1.1 均 NXDOMAIN → 项目已被删除或长期暂停
 - 处理：需老板介入——恢复/重建 Supabase 项目并更新 /root/.openclaw/credentials/supabase.json，或停用该 cron
+
+## 2026-09-23 sync-supabase-30m 失败 (NXDOMAIN)
+- 现象: sync_supabase.py 三模块全部失败，Errno -2 Name or service not known
+- 根因: Supabase 项目 njxjuvxosvwvluxefrzg 域名 NXDOMAIN（8.8.8.8 与本地 DNS 均确认），项目已删除/释放，不可自愈
+- 处理: 已通过飞书告警老板；需更新 /root/.openclaw/credentials/supabase.json
+- 教训: DNS NXDOMAIN 对 Supabase 意味着项目没了，不必重试；直接告警
