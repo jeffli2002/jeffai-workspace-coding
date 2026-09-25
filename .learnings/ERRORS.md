@@ -62,3 +62,8 @@
 - 排查：本机 DNS 正常（github.com 可解析），supabase.co 主域可解析；项目域名 njxjuvxosvwvluxefrzg.supabase.co 在 8.8.8.8 / 1.1.1.1 均返回 NXDOMAIN
 - 结论：Supabase 项目很可能已被删除或项目 ref 变更，非网络抖动
 - 行动：需老板确认 Supabase 项目状态，并更新 /root/.openclaw/credentials/supabase.json 中的 url/service_key
+
+## 2026-09-25 sync-supabase-30m 失败
+- 脚本 sync_supabase.py 全部模块报 DNS 解析失败
+- 根因: njxjuvxosvwvluxefrzg.supabase.co 在本地及 8.8.8.8/1.1.1.1 均 NXDOMAIN（项目可能被暂停/删除或 URL 变更）
+- 处理: 需老板在 Supabase Dashboard 确认项目状态，恢复或更新 /root/.openclaw/credentials/supabase.json
