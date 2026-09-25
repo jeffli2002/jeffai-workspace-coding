@@ -51,3 +51,8 @@
 - 根因: Supabase 项目 njxjuvxosvwvluxefrzg 域名 NXDOMAIN（8.8.8.8 与本地 DNS 均确认），项目已删除/释放，不可自愈
 - 处理: 已通过飞书告警老板；需更新 /root/.openclaw/credentials/supabase.json
 - 教训: DNS NXDOMAIN 对 Supabase 意味着项目没了，不必重试；直接告警
+
+## 2026-09-25 11:30 CST — sync_supabase.py DNS NXDOMAIN
+- 现象: 定时任务 sync-supabase-30m 失败, memories/documents/tasks 全部报 "[Errno -2] Name or service not known"
+- 诊断: 本机 DNS 正常 (google.com 可解析), 但 njxjuvxosvwvluxefrzg.supabase.co 返回 NXDOMAIN → Supabase 项目疑似被删除/项目 ref 失效
+- 处置: 需老板确认 Supabase 项目状态并更新 /root/.openclaw/credentials/supabase.json
