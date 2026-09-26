@@ -67,3 +67,8 @@
 - 脚本 sync_supabase.py 全部模块报 DNS 解析失败
 - 根因: njxjuvxosvwvluxefrzg.supabase.co 在本地及 8.8.8.8/1.1.1.1 均 NXDOMAIN（项目可能被暂停/删除或 URL 变更）
 - 处理: 需老板在 Supabase Dashboard 确认项目状态，恢复或更新 /root/.openclaw/credentials/supabase.json
+
+## 2026-09-26 | sync-supabase-30m 失败：Supabase 项目域名 NXDOMAIN
+- 现象：sync_supabase.py 三个模块（Memories/Documents/Tasks）全部 `[Errno -2] Name or service not known`
+- 根因：`njxjuvxosvwvluxefrzg.supabase.co` DNS 解析 NXDOMAIN（本机 DNS 与 8.8.8.8 均确认），通用 DNS 正常 → Supabase 项目已被删除/释放，或 credentials 中的 url 已失效
+- 处置：需人工到 Supabase Dashboard 确认项目状态；更新 `/root/.openclaw/credentials/supabase.json` 的 url/service_key 后重跑脚本
