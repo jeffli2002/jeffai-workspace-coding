@@ -72,3 +72,9 @@
 - 现象：sync_supabase.py 三个模块（Memories/Documents/Tasks）全部 `[Errno -2] Name or service not known`
 - 根因：`njxjuvxosvwvluxefrzg.supabase.co` DNS 解析 NXDOMAIN（本机 DNS 与 8.8.8.8 均确认），通用 DNS 正常 → Supabase 项目已被删除/释放，或 credentials 中的 url 已失效
 - 处置：需人工到 Supabase Dashboard 确认项目状态；更新 `/root/.openclaw/credentials/supabase.json` 的 url/service_key 后重跑脚本
+
+## 2026-09-27 — sync-supabase-30m 失败：Supabase 项目域名 NXDOMAIN
+- **现象**：sync_supabase.py 三个模块（Memories/Documents/Tasks）全部报 `[Errno -2] Name or service not known`
+- **诊断**：本机 DNS 正常（github.com、supabase.co 均可解析）；经 Cloudflare DoH 公共 DNS 复核，`njxjuvxosvwvluxefrzg.supabase.co` 返回 NXDOMAIN(Status 3)
+- **结论**：Supabase 项目本身已不存在（免费项目长期暂停后被删除的可能性最大），非本机网络问题
+- **待办**：老板需在 Supabase 重建/恢复项目，用新 URL + service_key 更新 `/root/.openclaw/credentials/supabase.json`，之后重跑脚本验证
