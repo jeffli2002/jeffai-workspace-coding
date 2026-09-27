@@ -78,3 +78,5 @@
 - **诊断**：本机 DNS 正常（github.com、supabase.co 均可解析）；经 Cloudflare DoH 公共 DNS 复核，`njxjuvxosvwvluxefrzg.supabase.co` 返回 NXDOMAIN(Status 3)
 - **结论**：Supabase 项目本身已不存在（免费项目长期暂停后被删除的可能性最大），非本机网络问题
 - **待办**：老板需在 Supabase 重建/恢复项目，用新 URL + service_key 更新 `/root/.openclaw/credentials/supabase.json`，之后重跑脚本验证
+2026-09-27 10:30 - Supabase sync failed: DNS NXDOMAIN for njxjuvxosvwvluxefrzg.supabase.co - project may be deleted
+2026-09-27 10:30 - Supabase sync failed: DNS NXDOMAIN for njxjuvxosvwvluxefrzg.supabase.co - project may be deleted
