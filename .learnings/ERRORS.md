@@ -86,3 +86,11 @@
 - **诊断**: `njxjuvxosvwvluxefrzg.supabase.co` 在本机 DNS 和 8.8.8.8 均 NXDOMAIN；但 `supabase.co` 主域正常解析 → 非本机网络问题，是 Supabase 项目被删除/暂停回收
 - **处理**: 需要老板确认 Supabase 项目状态；若已重建项目，需更新 `/root/.openclaw/credentials/supabase.json` 中的 url/service_key
 - **复查**: 下次 cron 运行前若凭证未更新会继续失败
+
+## 2026-10-08 sync-supabase-30m DNS failure
+
+**错误**: `[Errno -2] Name or service not known` 在连接 Supabase 时
+**触发**: cron job `sync-supabase-30m`
+**根因**: 本机 VM 无法解析 `njxjuvxosvwvluxefrzg.supabase.co` DNS（网络隔离/防火墙问题）
+**影响**: Memories/Documents/Tasks 三个模块同步全部失败
+**处置**: 非脚本问题，无需老板介入；需检查 VM 网络出口策略或 Supabase IP白名单
