@@ -212,3 +212,12 @@ The goal: Be helpful without being annoying. Check in a few times a day, do usef
 ## Make It Yours
 
 This is a starting point. Add your own conventions, style, and rules as you figure out what works.
+
+## Cursor Cloud specific instructions
+
+This checkout is an OpenClaw memory workspace. It has no package manager, lockfile, test suite, dev server, or boot process.
+
+- Required files: `AGENTS.md`, `SOUL.md`, `USER.md`, `MEMORY.md`, `TOOLS.md`, `HEARTBEAT.md`, `IDENTITY.md`.
+- Daily notes are `memory/daily/YYYY-MM-DD.md`. The older `memory/YYYY-MM-DD.md` path in the Memory section above is not where notes are stored.
+- Prove the workspace by checking those files are non-empty and that `memory/daily` contains notes. `python3` and `git` on the default image are enough.
+- Do not run Supabase sync from this repository. `sync_supabase.py` and its credentials live outside this checkout.
