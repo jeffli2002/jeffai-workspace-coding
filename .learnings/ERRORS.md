@@ -94,3 +94,9 @@
 **根因**: 本机 VM 无法解析 `njxjuvxosvwvluxefrzg.supabase.co` DNS（网络隔离/防火墙问题）
 **影响**: Memories/Documents/Tasks 三个模块同步全部失败
 **处置**: 非脚本问题，无需老板介入；需检查 VM 网络出口策略或 Supabase IP白名单
+
+## 2026-10-10 | sync-supabase-30m 持续失败：Supabase 项目域名 NXDOMAIN
+- **现象**：`sync_supabase.py` 每 30 分钟运行均失败，Memories/Documents/Tasks 全模块报 `[Errno -2] Name or service not known`，exit 1。
+- **诊断**：脚本里 "✓ 已连接到 Supabase" 有误导性——`create_client` 不发网络请求，仅初始化。真实失败发生在首次 API 调用。`getent hosts` 与 `nslookup`（本地 DNS 183.60.83.19 + Google 8.8.8.8）对 `njxjuvxosvwvluxefrzg.supabase.co` 均返回 NXDOMAIN。
+- **结论**：非本机网络问题；Supabase 项目疑似被删除或 project ref 变更。
+- **待办**：老板确认 Supabase 项目状态，更新 `/root/.openclaw/credentials/supabase.json`（url + service_key）；恢复前该 cron 会持续失败。
