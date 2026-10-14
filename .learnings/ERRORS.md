@@ -100,3 +100,8 @@
 - **诊断**：脚本里 "✓ 已连接到 Supabase" 有误导性——`create_client` 不发网络请求，仅初始化。真实失败发生在首次 API 调用。`getent hosts` 与 `nslookup`（本地 DNS 183.60.83.19 + Google 8.8.8.8）对 `njxjuvxosvwvluxefrzg.supabase.co` 均返回 NXDOMAIN。
 - **结论**：非本机网络问题；Supabase 项目疑似被删除或 project ref 变更。
 - **待办**：老板确认 Supabase 项目状态，更新 `/root/.openclaw/credentials/supabase.json`（url + service_key）；恢复前该 cron 会持续失败。
+
+## 2026-10-14 — Supabase sync failed: project DNS NXDOMAIN
+- Task: cron sync-supabase-30m, script `second-brain/scripts/supabase/sync_supabase.py`
+- What happened: All 3 modules (Memories/Documents/Tasks) failed with `[Errno -2] Name or service not known`. Verified via 8.8.8.8 and 1.1.1.1: `njxjuvxosvwvluxefrzg.supabase.co` is NXDOMAIN globally — the Supabase project appears deleted (or free-tier pause expired). Local DNS/network is fine.
+- Action needed: Boss must check Supabase dashboard — restore/recreate project and update `/root/.openclaw/credentials/supabase.json` (url + service_key). Do NOT keep retrying sync until credentials are fixed.
