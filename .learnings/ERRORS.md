@@ -105,3 +105,9 @@
 - Task: cron sync-supabase-30m, script `second-brain/scripts/supabase/sync_supabase.py`
 - What happened: All 3 modules (Memories/Documents/Tasks) failed with `[Errno -2] Name or service not known`. Verified via 8.8.8.8 and 1.1.1.1: `njxjuvxosvwvluxefrzg.supabase.co` is NXDOMAIN globally — the Supabase project appears deleted (or free-tier pause expired). Local DNS/network is fine.
 - Action needed: Boss must check Supabase dashboard — restore/recreate project and update `/root/.openclaw/credentials/supabase.json` (url + service_key). Do NOT keep retrying sync until credentials are fixed.
+
+## 2026-10-17 — sync-supabase-30m 失败: Supabase 项目 DNS NXDOMAIN
+- 现象: sync_supabase.py 三个模块 (memories/documents/tasks) 全部 "Name or service not known"
+- 排查: 本机 DNS 正常 (google.com 可解析); 8.8.8.8 / 1.1.1.1 均返回 NXDOMAIN for njxjuvxosvwvluxefrzg.supabase.co; supabase.co 主域正常
+- 结论: Supabase 项目 njxjuvxosvwvluxefrzg 已被删除或长期暂停后回收, 非脚本/网络问题
+- 处理: 需老板确认项目状态, 恢复或新建项目并更新 /root/.openclaw/credentials/supabase.json
