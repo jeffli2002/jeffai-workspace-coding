@@ -111,3 +111,4 @@
 - 排查: 本机 DNS 正常 (google.com 可解析); 8.8.8.8 / 1.1.1.1 均返回 NXDOMAIN for njxjuvxosvwvluxefrzg.supabase.co; supabase.co 主域正常
 - 结论: Supabase 项目 njxjuvxosvwvluxefrzg 已被删除或长期暂停后回收, 非脚本/网络问题
 - 处理: 需老板确认项目状态, 恢复或新建项目并更新 /root/.openclaw/credentials/supabase.json
+- 2026-10-19 | sync-supabase-30m 失败 | Supabase 项目域名 njxjuvxosvwvluxefrzg.supabase.co 解析 NXDOMAIN（本机 DNS 正常，supabase.co 主域可解析），疑似项目被暂停/删除（免费层不活跃自动暂停）。需要老板到 Supabase 控制台恢复项目或更新 credentials/supabase.json。
