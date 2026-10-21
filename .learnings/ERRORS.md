@@ -123,3 +123,10 @@
 - What happened: `python3 /root/.openclaw/workspace/projects/second-brain/scripts/supabase/sync_supabase.py` failed for Memories, Documents, and Tasks with `[Errno -2] Name or service not known`.
 - What to do differently: Before sync, verify DNS/network reachability to Supabase host; consider preflight check and clearer failure alert when name resolution fails.
 
+
+## 2026-10-21 22:08 - sync-supabase-30m 失败 + 脚本改进（DNS 预检）
+- 现象: sync_supabase.py 三个模块全报 `[Errno -2] Name or service not known`
+- 根因确认: njxjuvxosvwvluxefrzg.supabase.co 在本机 DNS、Google DoH、Cloudflare DoH、223.5.5.5/腾讯 DoH 全部 NXDOMAIN（supabase.co 主域正常）→ Supabase 项目被删除/暂停回收
+- 改进: scripts/supabase/sync_supabase.py 新增 socket DNS 预检（preflight），失败时直接报明确原因，create_client 不再"假成功"
+- 教训: supabase-py 的 create_client 不做连通性校验，永远不要把它的成功当成连接成功
+- 处理: 已发飞书 failure alert（om_x100b62b83a0acca8b07c02cdd3d799a），待老板恢复项目或更新 credentials/supabase.json
