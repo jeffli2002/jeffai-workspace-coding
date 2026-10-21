@@ -118,3 +118,8 @@
 - 诊断: njxjuvxosvwvluxefrzg.supabase.co 在 8.8.8.8 和本机 DNS 均返回 NXDOMAIN；supabase.co 主域正常
 - 结论: Supabase 免费版项目疑似被暂停（DNS 记录被移除），非本机网络问题
 - 处理: 需老板到 Supabase Dashboard 恢复/解除暂停项目；恢复后重跑脚本即可
+## 2026-10-21 - Supabase sync DNS failure
+
+- What happened: `python3 /root/.openclaw/workspace/projects/second-brain/scripts/supabase/sync_supabase.py` failed for Memories, Documents, and Tasks with `[Errno -2] Name or service not known`.
+- What to do differently: Before sync, verify DNS/network reachability to Supabase host; consider preflight check and clearer failure alert when name resolution fails.
+
