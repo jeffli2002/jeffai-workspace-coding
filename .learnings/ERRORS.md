@@ -112,3 +112,9 @@
 - 结论: Supabase 项目 njxjuvxosvwvluxefrzg 已被删除或长期暂停后回收, 非脚本/网络问题
 - 处理: 需老板确认项目状态, 恢复或新建项目并更新 /root/.openclaw/credentials/supabase.json
 - 2026-10-19 | sync-supabase-30m 失败 | Supabase 项目域名 njxjuvxosvwvluxefrzg.supabase.co 解析 NXDOMAIN（本机 DNS 正常，supabase.co 主域可解析），疑似项目被暂停/删除（免费层不活跃自动暂停）。需要老板到 Supabase 控制台恢复项目或更新 credentials/supabase.json。
+
+## 2026-10-21 - sync-supabase-30m 失败: Supabase 项目域名 NXDOMAIN
+- 现象: sync_supabase.py 三个模块全部报 "Name or service not known"
+- 诊断: njxjuvxosvwvluxefrzg.supabase.co 在 8.8.8.8 和本机 DNS 均返回 NXDOMAIN；supabase.co 主域正常
+- 结论: Supabase 免费版项目疑似被暂停（DNS 记录被移除），非本机网络问题
+- 处理: 需老板到 Supabase Dashboard 恢复/解除暂停项目；恢复后重跑脚本即可
