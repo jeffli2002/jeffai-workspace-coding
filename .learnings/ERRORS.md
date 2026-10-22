@@ -130,3 +130,15 @@
 - 改进: scripts/supabase/sync_supabase.py 新增 socket DNS 预检（preflight），失败时直接报明确原因，create_client 不再"假成功"
 - 教训: supabase-py 的 create_client 不做连通性校验，永远不要把它的成功当成连接成功
 - 处理: 已发飞书 failure alert（om_x100b62b83a0acca8b07c02cdd3d799a），待老板恢复项目或更新 credentials/supabase.json
+
+## 2026-10-22 00:03 - sync-supabase-30m 失败：Supabase 项目域名 NXDOMAIN（持续第 N 次）
+- 现象: sync_supabase.py exit 1，DNS 预检直接拦截，0 个模块同步
+- 诊断: njxjuvxosvwvluxefrzg.supabase.co 在本机 DNS / 8.8.8.8 / 1.1.1.1 全部 NXDOMAIN；supabase.co 主域正常 → 项目已被暂停/回收
+- 处置: 已发飞书 failure alert（om_x100b62ba7558e8a4b32e113b6462486）；需老板恢复项目或更新 credentials/supabase.json
+- 注意: cron run 的 status 始终为 "ok"（agent turn 正常返回），所以 cron 自带 failureAlert（after=3）不会触发；失败告警只能手动发消息
+
+## 2026-10-22 — sync_supabase.py 失败：Supabase 项目域名 NXDOMAIN
+- 现象：`python3 /root/.openclaw/workspace/projects/second-brain/scripts/supabase/sync_supabase.py` exit 1，报 "DNS 解析失败 njxjuvxosvwvluxefrzg.supabase.co"。
+- 排查：本机 DNS 正常（supabase.co / api.github.com 可解析），8.8.8.8 / 1.1.1.1 / 223.5.5.5 三家公网解析器对该域名均返回 NXDOMAIN → 项目在公网已不存在（被删除或暂停回收），非本机网络问题。
+- 处理：已发飞书 failure alert 给老板，要求在 Supabase Dashboard 恢复项目并更新 /root/.openclaw/credentials/supabase.json。
+- 下次做法：遇到此类 NXDOMAIN，先用 3 家公网 DNS 交叉验证再判定是本机网络还是项目本身失效，避免误判为网络抖动。
