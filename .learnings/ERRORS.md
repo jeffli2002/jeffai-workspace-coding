@@ -155,3 +155,10 @@
 - 兜底排查: 全盘只有 njxjuvxosvwvluxefrzg 一个 project ref（workspace/credentials 共 30 处引用），无新 ref 可切换；无 supabase CLI / access token 可用，无法自行恢复
 - 处理: 已发飞书 failure alert 给老板（ou_aeb3984fc66ae7c78e396255f7c7a11b），要求在 Supabase Dashboard 恢复项目或更新 /root/.openclaw/credentials/supabase.json
 - 遗留: cron run 的 lastStatus 仍为 ok（agent turn 正常返回），failureAlert(after=3) 不会触发，告警只能手动发
+
+## 2026-10-22 18:02 - sync-supabase-30m 失败（Supabase 项目域名持续 NXDOMAIN）
+- 现象: sync_supabase.py exit 1，`DNS 解析失败: njxjuvxosvwvluxefrzg.supabase.co -> [Errno -2] Name or service not known`，0 模块同步
+- 排查: dig @8.8.8.8 / @1.1.1.1 均 NXDOMAIN；supabase.com、api.supabase.com 解析正常 → 项目域名公网已不存在（非本机网络）
+- 历史确认: cron run 历史显示自 2026-09 起持续同一错误，累计 30+ 轮；lastStatus 仍为 ok，故 failureAlert(after=3) 永不触发，只能手动飞书告警
+- 处理: 已发飞书 failure alert（om_x100b62aa6b2d00acce9e370d11eafa7），并建议修复前暂停该 30 分钟任务
+- 下次做法: 该类"项目域名消失"故障无需每轮重复全网排查，确认无新 ref 后直接告警 + 建议暂停任务，等待老板提供新凭证
