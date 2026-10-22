@@ -148,3 +148,10 @@
 - 排查: 本地 getent + Google DoH 均返回 NXDOMAIN；supabase.com / google.com 解析正常 → 非本机网络问题，是该项目域名已不存在（项目被删除/回收）
 - 处理: 已飞书告警老板，等待恢复项目或更新 /root/.openclaw/credentials/supabase.json 的 url/ref
 - 下次: 再遇到类似域名解析失败，先用 DoH 复核并对比同域根域解析结果，再判定是本地网络还是项目失效
+
+## 2026-10-22 15:02 - sync-supabase-30m 失败（Supabase 项目域名 NXDOMAIN，持续故障）
+- 现象: sync_supabase.py exit 1，报 `DNS 解析失败: njxjuvxosvwvluxefrzg.supabase.co -> [Errno -2] Name or service not known`，0 个模块同步
+- 排查: 本机 DNS(183.60.83.19) / 8.8.8.8 / 1.1.1.1 对该域名均 NXDOMAIN；supabase.co 与 api.supabase.com 解析正常 → 非本机网络问题，Supabase 项目已被删除/暂停回收
+- 兜底排查: 全盘只有 njxjuvxosvwvluxefrzg 一个 project ref（workspace/credentials 共 30 处引用），无新 ref 可切换；无 supabase CLI / access token 可用，无法自行恢复
+- 处理: 已发飞书 failure alert 给老板（ou_aeb3984fc66ae7c78e396255f7c7a11b），要求在 Supabase Dashboard 恢复项目或更新 /root/.openclaw/credentials/supabase.json
+- 遗留: cron run 的 lastStatus 仍为 ok（agent turn 正常返回），failureAlert(after=3) 不会触发，告警只能手动发
