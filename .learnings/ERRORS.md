@@ -142,3 +142,9 @@
 - 排查：本机 DNS 正常（supabase.co / api.github.com 可解析），8.8.8.8 / 1.1.1.1 / 223.5.5.5 三家公网解析器对该域名均返回 NXDOMAIN → 项目在公网已不存在（被删除或暂停回收），非本机网络问题。
 - 处理：已发飞书 failure alert 给老板，要求在 Supabase Dashboard 恢复项目并更新 /root/.openclaw/credentials/supabase.json。
 - 下次做法：遇到此类 NXDOMAIN，先用 3 家公网 DNS 交叉验证再判定是本机网络还是项目本身失效，避免误判为网络抖动。
+
+## 2026-10-22 sync-supabase-30m 失败（DNS NXDOMAIN）
+- 现象: sync_supabase.py 退出码 1，报 `DNS 解析失败: njxjuvxosvwvluxefrzg.supabase.co`
+- 排查: 本地 getent + Google DoH 均返回 NXDOMAIN；supabase.com / google.com 解析正常 → 非本机网络问题，是该项目域名已不存在（项目被删除/回收）
+- 处理: 已飞书告警老板，等待恢复项目或更新 /root/.openclaw/credentials/supabase.json 的 url/ref
+- 下次: 再遇到类似域名解析失败，先用 DoH 复核并对比同域根域解析结果，再判定是本地网络还是项目失效
