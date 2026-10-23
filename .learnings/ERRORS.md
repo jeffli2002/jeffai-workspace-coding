@@ -162,3 +162,9 @@
 - 历史确认: cron run 历史显示自 2026-09 起持续同一错误，累计 30+ 轮；lastStatus 仍为 ok，故 failureAlert(after=3) 永不触发，只能手动飞书告警
 - 处理: 已发飞书 failure alert（om_x100b62aa6b2d00acce9e370d11eafa7），并建议修复前暂停该 30 分钟任务
 - 下次做法: 该类"项目域名消失"故障无需每轮重复全网排查，确认无新 ref 后直接告警 + 建议暂停任务，等待老板提供新凭证
+
+## 2026-10-23 — sync_supabase.py: Supabase 项目域名 NXDOMAIN
+- 现象：脚本以 DNS 解析失败退出（code 1），`njxjuvxosvwvluxefrzg.supabase.co` 解析不到。
+- 排查：supabase.com / api.supabase.com 均可解析连通，排除本机网络问题；全工作区仅此一个项目 ref（credentials + 4 处源码硬编码）。
+- 结论：Supabase 项目被删除或项目 ref 失效，需人工在 Dashboard 恢复或换新 URL/key。
+- 后续：换 URL 时需同步修改 credentials/supabase.json 与 second-brain 内 4 处硬编码 URL。
