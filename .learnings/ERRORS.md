@@ -168,3 +168,9 @@
 - 排查：supabase.com / api.supabase.com 均可解析连通，排除本机网络问题；全工作区仅此一个项目 ref（credentials + 4 处源码硬编码）。
 - 结论：Supabase 项目被删除或项目 ref 失效，需人工在 Dashboard 恢复或换新 URL/key。
 - 后续：换 URL 时需同步修改 credentials/supabase.json 与 second-brain 内 4 处硬编码 URL。
+- 2026-10-25 复发：cron sync-supabase-30m 再次以同一原因失败；已向老板发 failure alert（需在 Dashboard 恢复项目或更新凭据）。若短期无法恢复应暂停该 cron，避免每 30 分钟刷屏。
+
+## 2026-10-25 — sync-supabase-30m DNS 解析失败
+- 现象：脚本 `scripts/supabase/sync_supabase.py` 退出码 1，`nxxjuvxosvwvluxefrzg.supabase.co` DNS 无法解析。
+- 原因：Supabase 项目域名公网不存在（项目删除/回收），需在 Dashboard 恢复或更新 credentials/supabase.json。
+- 改进：下次遇到同类失败先检查 credentials 文件中的 project_url 是否仍有效，再重试；失败后按任务要求发 failure alert。
