@@ -174,3 +174,9 @@
 - 现象：脚本 `scripts/supabase/sync_supabase.py` 退出码 1，`nxxjuvxosvwvluxefrzg.supabase.co` DNS 无法解析。
 - 原因：Supabase 项目域名公网不存在（项目删除/回收），需在 Dashboard 恢复或更新 credentials/supabase.json。
 - 改进：下次遇到同类失败先检查 credentials 文件中的 project_url 是否仍有效，再重试；失败后按任务要求发 failure alert。
+
+## 2026-10-26 11:11 — sync-supabase-30m DNS 解析失败（第 N 次复发）
+- 现象：脚本真实执行 exit 1，`njxjuvxosvwvluxefrzg.supabase.co` → Errno -2
+- 复核：Google DoH + Cloudflare DoH 均 Status=3 (NXDOMAIN)，权威 NS 为 cloudflare；supabase.co / api.supabase.com 正常 → 项目域名公网不存在，非本机网络
+- 处理：已发飞书 failure alert（om_x100b62d81c7630bcb321deaa8c8683d）
+- 改进建议（长期）：该 cron 自 2026-09 起 2000+ 轮同因失败，failureAlert(after=3) 因 run status=ok 永不触发，只能手动发；建议在脚本层检测 NXDOMAIN 后自动 disable 该 job，或修复 Supabase 域名
