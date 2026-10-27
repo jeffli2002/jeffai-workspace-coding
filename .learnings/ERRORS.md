@@ -190,3 +190,9 @@
 - 复核：dig @8.8.8.8 / @1.1.1.1 均无 A 记录；supabase.co、api.supabase.com 解析与连通正常（api 404 属预期）→ 项目域名公网已不存在
 - 处理：已发飞书 failure alert（om_x100b62cbd20acca0ce3408cb90bc12f）给老板，请其恢复项目或更新凭据，并建议恢复前暂停此 cron
 - 注意：cron failureAlert(after=3) 不生效——job 的 lastRunStatus 恒为 ok（agent 正常返回），只能手动发 message 告警
+
+## 2026-10-27 — Supabase 同步 DNS NXDOMAIN
+- 现象：`sync_supabase.py` 报 `DNS 解析失败: njxjuvxosvwvluxefrzg.supabase.co -> Name or service not known`，退出码 1。
+- 排查：本机 nslookup + Google DNS + Cloudflare DNS 三重确认权威 NXDOMAIN；同域 `supabase.co` 正常解析 → 非本机网络/脚本 bug，Supabase 项目已被删除或暂停回收。
+- 处理：已通过飞书向老板发出 failure alert（项目 ref 恢复或更新 `/root/.openclaw/credentials/supabase.json` 即可自愈）；cron 保持 30 分钟重试。
+- 下次做类似排查：先用权威公共 DNS 复核 NXDOMAIN，再判定是凭据问题还是平台侧资源消失。
