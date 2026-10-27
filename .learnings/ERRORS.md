@@ -180,3 +180,13 @@
 - 复核：Google DoH + Cloudflare DoH 均 Status=3 (NXDOMAIN)，权威 NS 为 cloudflare；supabase.co / api.supabase.com 正常 → 项目域名公网不存在，非本机网络
 - 处理：已发飞书 failure alert（om_x100b62d81c7630bcb321deaa8c8683d）
 - 改进建议（长期）：该 cron 自 2026-09 起 2000+ 轮同因失败，failureAlert(after=3) 因 run status=ok 永不触发，只能手动发；建议在脚本层检测 NXDOMAIN 后自动 disable 该 job，或修复 Supabase 域名
+
+## 2026-10-27 — sync-supabase-30m: Supabase 项目域名 NXDOMAIN
+- 发生了什么：运行 second-brain/scripts/supabase/sync_supabase.py 失败，DNS 解析 njxjuvxosvwvluxefrzg.supabase.co 报 NXDOMAIN（Cloudflare/Google DNS 复核均无记录；supabase.co 本身可解析）。
+- 怎么处理：不要反复重试该脚本消耗资源；先确认项目是否被删除/暂停回收，恢复项目或更新 /root/.openclaw/credentials/supabase.json 中的 url（同时注意 src/app/api/rd-memos/route.ts、src/app/page.tsx 有硬编码 URL）。飞书告警直接用 message 工具发到 user:ou_aeb...（feishu-lark-agent CLI 因缺少 FEISHU_APP_ID/SECRET 不可用）。
+
+## 2026-10-27 09:08 — sync-supabase-30m DNS 解析失败（持续复发）
+- 现象：脚本真实执行 exit 1，`njxjuvxosvwvluxefrzg.supabase.co` → Errno -2
+- 复核：dig @8.8.8.8 / @1.1.1.1 均无 A 记录；supabase.co、api.supabase.com 解析与连通正常（api 404 属预期）→ 项目域名公网已不存在
+- 处理：已发飞书 failure alert（om_x100b62cbd20acca0ce3408cb90bc12f）给老板，请其恢复项目或更新凭据，并建议恢复前暂停此 cron
+- 注意：cron failureAlert(after=3) 不生效——job 的 lastRunStatus 恒为 ok（agent 正常返回），只能手动发 message 告警
