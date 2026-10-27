@@ -196,3 +196,8 @@
 - 排查：本机 nslookup + Google DNS + Cloudflare DNS 三重确认权威 NXDOMAIN；同域 `supabase.co` 正常解析 → 非本机网络/脚本 bug，Supabase 项目已被删除或暂停回收。
 - 处理：已通过飞书向老板发出 failure alert（项目 ref 恢复或更新 `/root/.openclaw/credentials/supabase.json` 即可自愈）；cron 保持 30 分钟重试。
 - 下次做类似排查：先用权威公共 DNS 复核 NXDOMAIN，再判定是凭据问题还是平台侧资源消失。
+
+## 2026-10-27 — sync_supabase.py fails: NXDOMAIN for project domain
+- What: `python3 .../scripts/supabase/sync_supabase.py` exits 1; `njxjuvxosvwvluxefrzg.supabase.co` returns NXDOMAIN.
+- Verified: host DNS is healthy (supabase.com / api.supabase.com resolve OK) → not a local network problem; the Supabase project itself no longer exists (deleted/paused/reclaimed).
+- Do differently: don't re-investigate the network next run — check the project domain only, and escalate the credential/url fix to the owner instead of retrying blindly.
