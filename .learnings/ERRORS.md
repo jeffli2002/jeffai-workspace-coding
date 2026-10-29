@@ -201,3 +201,9 @@
 - What: `python3 .../scripts/supabase/sync_supabase.py` exits 1; `njxjuvxosvwvluxefrzg.supabase.co` returns NXDOMAIN.
 - Verified: host DNS is healthy (supabase.com / api.supabase.com resolve OK) → not a local network problem; the Supabase project itself no longer exists (deleted/paused/reclaimed).
 - Do differently: don't re-investigate the network next run — check the project domain only, and escalate the credential/url fix to the owner instead of retrying blindly.
+
+## 2026-10-29 sync-supabase-30m 失败
+- 现象：sync_supabase.py 退出码 1，DNS 解析失败 njxjuvxosvwvluxefrzg.supabase.co
+- 诊断：外网 DNS 正常，仅该 Supabase 项目域名无解析记录 → 项目疑似被删除/暂停回收
+- 处理：已通过飞书向老板发送 failure alert（om_x100b611ab54af8b4cfe32856e671fcd）；需老板在 Dashboard 恢复项目或更新 /root/.openclaw/credentials/supabase.json
+- 注意：failureAlert 配置的 open_id 是 ou_aeb3984fc66ae7c78e396255f7c7a11b，转发时务必逐字符核对（曾因错抄成 c7c8 导致 400）
