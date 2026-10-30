@@ -219,3 +219,9 @@
 - 复核：8.8.8.8 与 1.1.1.1 均 NXDOMAIN，supabase.co 主域解析正常 → Supabase 项目侧域名失效，非本机网络/脚本问题
 - 处理：已发飞书 failure alert（om_x100b610be37eaca4cebf613e8eae9de）给老板，需恢复项目或更新 /root/.openclaw/credentials/supabase.json
 - 累计：09-14 起同一原因复发 30+ 次，脚本级 NXDOMAIN 自愈不可能；建议脚本检测到 NXDOMAIN 时自动 disable 本 cron 或改为每日一次，避免每 30 分钟重复告警
+
+## 2026-10-30 12:32 — sync_supabase.py NXDOMAIN（复发，同因）
+- 现象：退出码 1，`DNS 解析失败: njxjuvxosvwvluxefrzg.supabase.co -> [Errno -2] Name or service not known`
+- 复核：本地 resolver 183.60.83.19 与 8.8.8.8 均 NXDOMAIN；supabase.com / api.supabase.com 解析正常，api 返回 401（可达）→ Supabase 项目侧域名失效，非本机网络/脚本问题
+- 处理：已发飞书 failure alert（om_x100b6175be36dca4b320388d25cbc8a）给老板；需在 Dashboard 恢复/重建项目并更新 /root/.openclaw/credentials/supabase.json，或直接停用本 cron
+- 累计：同一原因自 2026-09-14 起持续复发（累计 2000+ 次连续失败），脚本级无法自愈；强烈建议在脚本预检 NXDOMAIN 时自动 disable 本 job 或降级为每日一次
