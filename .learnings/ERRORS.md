@@ -207,3 +207,15 @@
 - 诊断：外网 DNS 正常，仅该 Supabase 项目域名无解析记录 → 项目疑似被删除/暂停回收
 - 处理：已通过飞书向老板发送 failure alert（om_x100b611ab54af8b4cfe32856e671fcd）；需老板在 Dashboard 恢复项目或更新 /root/.openclaw/credentials/supabase.json
 - 注意：failureAlert 配置的 open_id 是 ou_aeb3984fc66ae7c78e396255f7c7a11b，转发时务必逐字符核对（曾因错抄成 c7c8 导致 400）
+
+## 2026-10-30 05:31 — sync_supabase.py NXDOMAIN（复发，同因）
+- 现象：退出码 1，DNS 解析失败 njxjuvxosvwvluxefrzg.supabase.co -> [Errno -2]
+- 复核：getent hosts 确认该子域 NXDOMAIN，supabase.co 正常 → 仍为 Supabase 项目侧域名失效，非本机网络
+- 处理：已发飞书 failure alert（om_x100b610ff9dc78a0b4a14cd24e039db）给老板；需恢复项目或更新 credentials/supabase.json
+- 长期：建议脚本检测 NXDOMAIN 后自动 disable 本 cron，避免每 30 分钟无效重试 + 重复告警
+
+## 2026-10-30 10:02 — sync_supabase.py NXDOMAIN（复发，同因）
+- 现象：退出码 1，`DNS 解析失败: njxjuvxosvwvluxefrzg.supabase.co -> [Errno -2] Name or service not known`
+- 复核：8.8.8.8 与 1.1.1.1 均 NXDOMAIN，supabase.co 主域解析正常 → Supabase 项目侧域名失效，非本机网络/脚本问题
+- 处理：已发飞书 failure alert（om_x100b610be37eaca4cebf613e8eae9de）给老板，需恢复项目或更新 /root/.openclaw/credentials/supabase.json
+- 累计：09-14 起同一原因复发 30+ 次，脚本级 NXDOMAIN 自愈不可能；建议脚本检测到 NXDOMAIN 时自动 disable 本 cron 或改为每日一次，避免每 30 分钟重复告警
